@@ -1,0 +1,38 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model BrandProfile {
+  id          String   @id @default(cuid())
+  name        String
+  guidelines  String?
+  logoPreview String?  @map("logo_preview")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  
+  // Relation to generated assets
+  assets      GeneratedAsset[]
+  
+  @@map("brand_profiles")
+}
+
+model GeneratedAsset {
+  id          String   @id @default(cuid())
+  profileId   String   @map("profile_id")
+  url         String
+  promptUsed  String   @map("prompt_used")
+  aspectRatio String   @map("aspect_ratio")
+  createdAt   DateTime @default(now()) @map("created_at")
+  
+  // Foreign key relation
+  profile     BrandProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  
+  @@map("generated_assets")
+}
