@@ -28,6 +28,10 @@ dist-ssr
 prisma/dev.db
 prisma/dev.db-journal
 
+# Local SQLite database (root-level, created by DATABASE_URL="file:./dev.db")
+/dev.db
+/dev.db-journal
+
 # Local Development Storage
 storage/
 !storage/.gitkeep

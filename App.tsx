@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { BrandProfile, GeneratedAsset, GenerationState, AspectRatio, ImageSize, CreativeMode } from './types';
 import SettingsDialog from './components/SettingsDialog';
 import TextEditorDialog from './components/TextEditorDialog';
@@ -15,6 +15,7 @@ import VisualAssets from './components/VisualAssets';
 import Gallery from './components/Gallery';
 import LoginScreen from './components/LoginScreen';
 import Toast from './components/Toast';
+import ErrorBoundary from './components/ErrorBoundary';
 
 const GALLERY_PAGE_SIZE = 10;
 const ALLOWED_DOMAIN = 'yourdomain.com'; // Change this to your domain
@@ -552,68 +553,76 @@ const App: React.FC = () => {
 
         {/* Content Area - Split View on Desktop */}
         <div className="flex-1 overflow-hidden relative">
-           {selectedProfile ? (
-             <div className="h-full w-full overflow-y-auto lg:overflow-hidden grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-zinc-800/50">
-               
-               {/* Left Panel: Campaign Inputs - Independently Scrollable on Desktop */}
-               <div className="lg:col-span-5 lg:h-full lg:overflow-y-auto custom-scrollbar bg-zinc-900/5">
-                   <div className="p-6 lg:p-10 space-y-6 max-w-2xl mx-auto lg:mx-0">
-                       <CampaignForm 
-                         mode={creativeMode}
-                         setMode={setCreativeMode}
-                         prompt={prompt} setPrompt={setPrompt}
-                         productDetails={productDetails} setProductDetails={setProductDetails}
-                         includeGuidelines={includeGuidelines} setIncludeGuidelines={setIncludeGuidelines}
-                         includeLogo={includeLogo} setIncludeLogo={setIncludeLogo}
-                         count={count} setCount={setCount}
-                         imageSize={imageSize} setImageSize={setImageSize}
-                         aspectRatio={aspectRatio} setAspectRatio={setAspectRatio}
-                         setEditingField={setEditingField}
-                         handleGenerate={handleGenerate}
-                         handleCancel={handleCancel}
-                         isProcessing={isProcessing}
-                         status={status}
-                         hasProductImages={hasRequiredImages}
-                       />
-                       
-                       <VisualAssets 
-                          mode={creativeMode}
-                          productImages={productImages}
-                          setProductImages={setProductImages}
-                          inspirationImages={inspirationImages}
-                          setInspirationImages={setInspirationImages}
-                          editSourceImage={editSourceImage}
-                          setEditSourceImage={setEditSourceImage}
-                          editRefImages={editRefImages}
-                          setEditRefImages={setEditRefImages}
-                       />
-                   </div>
-               </div>
+           <ErrorBoundary onError={(error) => setToast({ message: error.message, type: 'error' })}>
+             {selectedProfile ? (
+               <div className="h-full w-full overflow-y-auto lg:overflow-hidden grid grid-cols-1 lg:grid-cols-12 divide-y lg:divide-y-0 lg:divide-x divide-zinc-800/50">
+                 
+                 {/* Left Panel: Campaign Inputs - Independently Scrollable on Desktop */}
+                 <div className="lg:col-span-5 lg:h-full lg:overflow-y-auto custom-scrollbar bg-zinc-900/5">
+                     <div className="p-4 sm:p-6 lg:p-10 space-y-4 sm:space-y-6 max-w-2xl mx-auto lg:mx-0 safe-area-inset-bottom">
+                         <ErrorBoundary>
+                           <CampaignForm 
+                             mode={creativeMode}
+                             setMode={setCreativeMode}
+                             prompt={prompt} setPrompt={setPrompt}
+                             productDetails={productDetails} setProductDetails={setProductDetails}
+                             includeGuidelines={includeGuidelines} setIncludeGuidelines={setIncludeGuidelines}
+                             includeLogo={includeLogo} setIncludeLogo={setIncludeLogo}
+                             count={count} setCount={setCount}
+                             imageSize={imageSize} setImageSize={setImageSize}
+                             aspectRatio={aspectRatio} setAspectRatio={setAspectRatio}
+                             setEditingField={setEditingField}
+                             handleGenerate={handleGenerate}
+                             handleCancel={handleCancel}
+                             isProcessing={isProcessing}
+                             status={status}
+                             hasProductImages={hasRequiredImages}
+                           />
+                         </ErrorBoundary>
+                         
+                         <ErrorBoundary>
+                           <VisualAssets 
+                              mode={creativeMode}
+                              productImages={productImages}
+                              setProductImages={setProductImages}
+                              inspirationImages={inspirationImages}
+                              setInspirationImages={setInspirationImages}
+                              editSourceImage={editSourceImage}
+                              setEditSourceImage={setEditSourceImage}
+                              editRefImages={editRefImages}
+                              setEditRefImages={setEditRefImages}
+                           />
+                         </ErrorBoundary>
+                     </div>
+                 </div>
 
-               {/* Right Panel: Gallery - Independently Scrollable on Desktop */}
-               <div className="lg:col-span-7 lg:h-full lg:overflow-y-auto custom-scrollbar bg-zinc-950/30 shadow-inner">
-                   <div className="p-6 lg:p-10 h-full">
-                       <Gallery 
-                         galleryItems={galleryItems}
-                         selectedProfile={selectedProfile}
-                         isProcessing={isProcessing}
-                         status={status}
-                         hasMoreAssets={hasMoreAssets}
-                         isLoadingGallery={isLoadingGallery}
-                         handleLoadMore={handleLoadMore}
-                         handleRefresh={handleRefreshGallery}
-                         handleDeleteAsset={handleDeleteAsset}
-                         onEditAsset={handleEditAsset}
-                       />
-                   </div>
-               </div>
+                 {/* Right Panel: Gallery - Independently Scrollable on Desktop */}
+                 <div className="lg:col-span-7 lg:h-full lg:overflow-y-auto custom-scrollbar bg-zinc-950/30 shadow-inner">
+                     <div className="p-4 sm:p-6 lg:p-10 h-full safe-area-inset-bottom">
+                         <ErrorBoundary>
+                           <Gallery 
+                             galleryItems={galleryItems}
+                             selectedProfile={selectedProfile}
+                             isProcessing={isProcessing}
+                             status={status}
+                             hasMoreAssets={hasMoreAssets}
+                             isLoadingGallery={isLoadingGallery}
+                             handleLoadMore={handleLoadMore}
+                             handleRefresh={handleRefreshGallery}
+                             handleDeleteAsset={handleDeleteAsset}
+                             onEditAsset={handleEditAsset}
+                           />
+                         </ErrorBoundary>
+                     </div>
+                 </div>
 
-             </div>
-           ) : (
-             <div className="h-full overflow-y-auto p-6 lg:p-10">
-                <WelcomeScreen />
-             </div>
-           )}
+               </div>
+             ) : (
+               <div className="h-full overflow-y-auto p-4 sm:p-6 lg:p-10">
+                  <WelcomeScreen />
+               </div>
+             )}
+           </ErrorBoundary>
         </div>
       </main>
     </div>

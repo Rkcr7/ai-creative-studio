@@ -1,39 +1,129 @@
+<div align="center">
+
+<img width="120" alt="AI Creative Studio logo" src="./logo.png" />
+
 # 🎨 AI Creative Studio
 
-<div align="center">
-<img width="200" alt="Logo" src="./logo.png" />
+### Generate on-brand ad creatives & visual assets with AI — in seconds.
+
+A creative workspace that turns a brand profile and a short brief into
+production-ready marketing visuals, powered by Google Gemini.
+
+![Status](https://img.shields.io/badge/status-active%20development-orange)
+![License](https://img.shields.io/badge/license-MIT-blue)
+![React](https://img.shields.io/badge/React-18-61dafb?logo=react&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178c6?logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-6-646cff?logo=vite&logoColor=white)
+![Gemini](https://img.shields.io/badge/Google-Gemini-4285f4?logo=google&logoColor=white)
+
 </div>
 
-AI-powered creative asset generator using Google Gemini API and Supabase for storage.
+> 🚧 **Under active development** — features and APIs may change between updates.
+> Feedback and contributions are welcome.
+
+<div align="center">
+  <img width="900" alt="AI Creative Studio workspace" src="./public/1.png" />
+  <p><em>The workspace — write a brief on the left, watch on-brand creatives fill the gallery on the right.</em></p>
+</div>
 
 ---
 
-## 📋 Table of Contents
+## ✨ What is it?
 
-- [Prerequisites](#prerequisites)
-- [Quick Start](#quick-start)
-- [Environment Setup](#environment-setup)
-- [Authentication Bypass (Development)](#authentication-bypass-development)
-- [Supabase Setup](#supabase-setup)
-  - [Create Project](#1-create-supabase-project)
-  - [Get Credentials](#2-get-project-credentials)
-  - [Create Storage Bucket](#3-create-storage-bucket)
-  - [Run SQL Setup](#4-run-sql-setup)
-- [Running the App](#running-the-app)
-- [Troubleshooting](#troubleshooting)
+**AI Creative Studio** is an AI-powered design assistant for marketing teams,
+founders, and creators. You define a **brand profile** once — name, guidelines,
+logo — and the studio generates polished, on-brand visuals that respect your
+look and feel. No design tools, no prompt-engineering expertise required.
+
+Upload a few product shots, describe the campaign, pick an aspect ratio, and
+generate a full set of ad creatives ready to ship to social, web, or print.
 
 ---
 
-## Prerequisites
+## 🚀 Features
+
+| | Feature | Description |
+|---|---------|-------------|
+| 🏷️ | **Brand Profiles** | Save brand name, guidelines, and logo once — every generation stays on-brand. |
+| 📢 | **Ad Creative mode** | Turn a campaign brief (goal, copy ideas, product details) into finished ad creatives. |
+| 🖼️ | **Asset Generation mode** | Generate standalone visual assets from a composition brief, with optional logo + guideline injection. |
+| ✏️ | **Editor mode** | Refine any image with natural-language edit instructions ("remove background", "add neon glow"). |
+| 📤 | **Reference uploads** | Add up to **8 product images** and **4 style-inspiration images** to steer the AI. |
+| 🗂️ | **Per-brand Gallery** | Every generated asset is stored and organized by brand. |
+| 🌐 | **Dual environment** | Run fully local (SQLite + filesystem) or in the cloud (Supabase DB + Storage). |
+| 🔐 | **Auth-ready** | Google OAuth via Supabase, with a one-flag bypass for local development. |
+
+---
+
+## 🎯 What you can use it for
+
+- **Social ad campaigns** — batch-generate scroll-stopping creatives for Instagram, Facebook, and TikTok.
+- **Product marketing** — turn plain product photos into styled lifestyle and hero shots.
+- **Brand-consistent content** — keep every asset aligned to one set of brand guidelines.
+- **Rapid concepting** — explore visual directions in minutes instead of days.
+- **Creative editing** — iterate on existing assets without reopening a design tool.
+
+---
+
+## 📊 At a glance
+
+| Metric | Value |
+|--------|-------|
+| Creative modes | **3** — Ad Creative · Asset Gen · Editor |
+| Aspect ratios | **10** — from `1:1` square to `21:9` ultrawide |
+| Max resolution | **4K** (1K / 2K / 4K) |
+| Assets per batch | **Up to 10** |
+| Reference inputs | **8** product images + **4** style images |
+| Storage backends | **2** — local SQLite or Supabase cloud |
+
+---
+
+## 📸 Screenshots
+
+<table>
+  <tr>
+    <td width="50%">
+      <img alt="Visual asset uploads and aspect ratios" src="./public/2.png" /><br/>
+      <sub><b>Visual Assets</b> — upload product shots & style inspiration, pick from 10 aspect ratios.</sub>
+    </td>
+    <td width="50%">
+      <img alt="New Brand Profile form" src="./public/3.png" /><br/>
+      <sub><b>Brand Profiles</b> — define name, guidelines, and logo once.</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <img alt="Asset Generation mode" src="./public/4.png" /><br/>
+      <sub><b>Asset Gen</b> — generate visuals from a composition brief.</sub>
+    </td>
+    <td width="50%">
+      <img alt="Editor mode" src="./public/5.png" /><br/>
+      <sub><b>Editor</b> — refine any image with natural-language instructions.</sub>
+    </td>
+  </tr>
+</table>
+
+---
+
+## 🧰 Tech Stack
+
+- **Frontend:** React 18 · TypeScript · Vite 6
+- **AI:** Google Gemini (`@google/genai`)
+- **Backend (local):** Express 5 · Prisma 7 · SQLite
+- **Backend (cloud):** Supabase (PostgreSQL + Storage)
+
+---
+
+## 📋 Prerequisites
 
 - **Node.js** (v18 or higher recommended)
 - **npm** or **yarn**
-- **Gemini API Key** - [Get one here](https://aistudio.google.com/app/apikey)
-- **Supabase Account** - [Sign up free](https://supabase.com)
+- **Gemini API Key** — [Get one here](https://aistudio.google.com/app/apikey)
+- **Supabase Account** *(optional — only for cloud mode)* — [Sign up free](https://supabase.com)
 
 ---
 
-## Quick Start
+## ⚡ Quick Start
 
 ```bash
 # 1. Install dependencies
@@ -52,7 +142,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-## Environment Setup
+## 🔧 Environment Setup
 
 1. **Copy the template file:**
    ```bash
@@ -63,7 +153,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
    ```env
    # Gemini API Key (Required)
    GEMINI_API_KEY=your_actual_gemini_api_key
-   
+
    # Supabase Credentials (Required for cloud features)
    SUPABASE_URL=https://your-project-id.supabase.co
    SUPABASE_ANON_KEY=your_supabase_anon_key
@@ -73,7 +163,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-## Authentication Bypass (Development)
+## 🔐 Authentication Bypass (Development)
 
 For local development, authentication is **bypassed by default**.
 
@@ -103,7 +193,10 @@ const ALLOWED_DOMAIN = 'yourdomain.com';  // Change to your domain
 
 ---
 
-## Supabase Setup
+## 🗄️ Supabase Setup
+
+> Only needed for **cloud mode**. For local development, the app uses SQLite and
+> local file storage out of the box — see [DEVELOPMENT.md](./DEVELOPMENT.md).
 
 ### 1. Create Supabase Project
 
@@ -148,11 +241,8 @@ SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 3. **Copy and paste the ENTIRE SQL script below**
 4. Click **"Run"** (or press Ctrl/Cmd + Enter)
 
----
-
-## 📜 Complete SQL Setup Script
-
-Copy this entire script and run it in Supabase SQL Editor:
+<details>
+<summary><b>📜 Click to expand the complete SQL setup script</b></summary>
 
 ```sql
 -- ===========================================
@@ -255,9 +345,11 @@ CREATE POLICY "Public Deletes" ON storage.objects
 -- Your database is now ready for AI Creative Studio
 ```
 
+</details>
+
 ---
 
-## Running the App
+## ▶️ Running the App
 
 ### Development Mode
 
@@ -274,9 +366,12 @@ npm run build
 npm run preview
 ```
 
+> For the full local development guide (dual environments, scripts, database
+> management, API endpoints), see **[DEVELOPMENT.md](./DEVELOPMENT.md)**.
+
 ---
 
-## Troubleshooting
+## 🐛 Troubleshooting
 
 ### "Database not connected" Error
 
@@ -309,8 +404,15 @@ These are dev-time warnings and won't affect runtime.
 
 ---
 
-## 🔗 Links
+## 📄 License
 
+Released under the **[MIT License](./LICENSE)** — free to use, modify, and
+distribute. Just keep the copyright notice.
+
+---
+
+## 🔗 Links
 
 - **Gemini API Keys:** https://aistudio.google.com/app/apikey
 - **Supabase:** https://supabase.com
+- **Development Guide:** [DEVELOPMENT.md](./DEVELOPMENT.md)

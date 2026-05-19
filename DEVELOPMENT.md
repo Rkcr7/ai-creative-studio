@@ -28,7 +28,7 @@ npm run dev
 This will:
 1. Start the local Express API server on port `3001`
 2. Start the Vite dev server on port `3000`
-3. Use SQLite database (`prisma/dev.db`)
+3. Use SQLite database (`./dev.db`)
 4. Store files locally in `storage/creatives/`
 
 ### Production Mode
@@ -49,8 +49,8 @@ This will:
 AI creative studio/
 ├── prisma/
 │   ├── schema.prisma    # Database schema
-│   ├── migrations/      # Migration files
-│   └── dev.db          # SQLite database (auto-generated)
+│   └── migrations/      # Migration files
+├── dev.db               # SQLite database (auto-generated at project root, git-ignored)
 ├── server/
 │   ├── dev-server.ts   # Local development server
 │   └── tsconfig.json   # Server TypeScript config
@@ -64,13 +64,13 @@ AI creative studio/
 ├── storage/
 │   └── creatives/      # Local file storage
 │       └── {brand_id}/ # Brand-specific folders
-├── .env                # Environment configuration
+├── .env.local           # Environment configuration (git-ignored)
 └── package.json
 ```
 
 ## ⚙️ Environment Configuration
 
-Edit `.env` file:
+Edit your `.env.local` file:
 
 ```env
 # Environment mode: 'development' or 'production'
