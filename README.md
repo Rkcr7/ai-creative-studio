@@ -125,7 +125,24 @@ generate a full set of ad creatives ready to ship to social, web, or print.
 
 ---
 
-## ⚡ Quick Start (one command)
+## ⚙️ Setup — Pick Your Path
+
+There are two ways to run AI Creative Studio. Pick the one that matches your situation:
+
+| | 🏠 **Local Setup** *(single machine / personal)* | 🏢 **Production Setup** *(org-wide / team)* |
+|---|---|---|
+| **Who it's for** | One person trying it out, or solo development | An agency or team sharing brand profiles + assets |
+| **Database** | SQLite file on your laptop | Supabase Postgres (cloud) |
+| **Storage** | Local `storage/` folder | Supabase Storage bucket |
+| **Auth** | Skipped (`BYPASS_AUTH = true`) | Google Sign-In via Supabase, restricted to your team's domain |
+| **Setup time** | ~5 min (one script) | ~20 min (Supabase + Google OAuth + deploy) |
+| **Cost** | Just Gemini API usage | Same + Supabase (free tier covers small teams) |
+
+> 👉 **Recommended:** start with **Local Setup** to validate it works for you. Moving to Production later is just editing `.env.local` + adding cloud credentials — no code changes.
+
+---
+
+## 🏠 Quick Start — Local Setup *(single machine)*
 
 The fastest path — an interactive setup script that handles everything: prompts for your Gemini key, installs dependencies, runs migrations, creates the storage folder, and starts the dev server. Re-running is safe — already-done steps are skipped.
 
@@ -164,9 +181,8 @@ The script validates input format (Gemini key starts with `AIza`, Supabase URL m
 
 </details>
 
----
-
-### Manual setup (if you prefer)
+<details>
+<summary><b>Manual setup (if you prefer to do it by hand)</b></summary>
 
 ```bash
 # 1. Install dependencies
@@ -187,11 +203,36 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-> 🌐 **Want cloud mode (Supabase DB + Storage)?** Fill in `SUPABASE_URL` and `SUPABASE_ANON_KEY`, set `APP_ENV=production` in `.env.local`, then run `npm run dev:prod`. See [Supabase Setup](#️-supabase-setup) below.
+</details>
 
 ---
 
-## 🔧 Environment Setup
+## 🏢 Production Setup — Organization-Wide *(team / cloud)*
+
+Use this path when you want your whole agency/team to share brand profiles, gallery assets, and sign in with their work Google account.
+
+You'll wire up **three things** (~20 min total):
+
+1. **🗄️ Supabase project** — hosts the Postgres DB and the asset storage bucket.
+   → Follow [**Supabase Setup**](#️-supabase-setup) below (create project, run SQL, create `creatives` bucket).
+
+2. **🔐 Google OAuth via Supabase** — so only your team's email domain can sign in.
+   → Follow [**GOOGLE_AUTH_SETUP.md**](./GOOGLE_AUTH_SETUP.md) (10-min walkthrough with screenshots).
+
+3. **🚀 Production-mode toggle** — switch the app from "bypass auth, local DB" to "require Google, cloud DB":
+   - In `.env.local`: set `APP_ENV=production` and fill in `SUPABASE_URL` + `SUPABASE_ANON_KEY`
+   - In `App.tsx`: set `BYPASS_AUTH = false` and change `ALLOWED_DOMAIN` to your team's domain
+   - Run `npm run dev:prod` (or deploy the built app to any host — Vercel, Render, etc.)
+
+> 💡 **The setup script also handles Production mode.** If your `.env.local` already has `APP_ENV=production`, `setup.sh` / `setup.ps1` will prompt for your Supabase credentials and start the cloud-mode dev server.
+
+> 📦 **One-click cloud deploy** (Vercel/Supabase integration) is on the roadmap — for now, deploy the `npm run build` output to any static host that runs Node.
+
+---
+
+## 🔧 Environment Setup *(reference for both paths)*
+
+> 💡 The setup script writes this file for you. This section is here for reference — read it if you want to know what each variable does or edit `.env.local` by hand.
 
 1. **Copy the template file:**
    ```bash
@@ -212,7 +253,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-## 🔐 Authentication
+## 🔐 Authentication *(skipped in Local; required in Production)*
 
 The app supports **Google Sign-In via Supabase**, with a one-flag bypass for local development.
 
@@ -240,9 +281,9 @@ It covers: grabbing the Supabase callback URL, creating the Google Cloud OAuth a
 
 ---
 
-## 🗄️ Supabase Setup
+## 🗄️ Supabase Setup *(Production / Org-wide path only)*
 
-> Only needed for **cloud mode**. For local development, the app uses SQLite and
+> Only needed for **Production / Org-wide setup**. For Local Setup, the app uses SQLite and
 > local file storage out of the box — see [DEVELOPMENT.md](./DEVELOPMENT.md).
 
 ### 1. Create Supabase Project
