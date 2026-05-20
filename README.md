@@ -125,9 +125,48 @@ generate a full set of ad creatives ready to ship to social, web, or print.
 
 ---
 
-## ⚡ Quick Start
+## ⚡ Quick Start (one command)
 
-> 👉 **New here? Start with local mode.** It only needs a Gemini API key — no Supabase, no Google OAuth, no SQL. Cloud mode is a 5-minute upgrade once you've tried it out.
+The fastest path — an interactive setup script that handles everything: prompts for your Gemini key, installs dependencies, runs migrations, creates the storage folder, and starts the dev server. Re-running is safe — already-done steps are skipped.
+
+### macOS / Linux
+
+```bash
+bash setup.sh
+```
+
+### Windows (PowerShell)
+
+```powershell
+powershell -ExecutionPolicy Bypass -File setup.ps1
+```
+
+> 👉 **New here? Just run the script.** It defaults to local mode (SQLite + filesystem) so no Supabase or Google OAuth needed to try it out. It also tells you what each value is for — including the Gemini billing requirement — before asking.
+
+When it's done, your browser opens to [http://localhost:3000](http://localhost:3000).
+
+<details>
+<summary><b>What the script does (step-by-step)</b></summary>
+
+| Step | What it checks / does |
+|------|----------------------|
+| 1 | Verifies you're in the project root (`package.json`) |
+| 2 | Verifies Node.js v18+ is installed (links to download if not) |
+| 3 | Creates `.env.local` from `.env.example` if missing |
+| 4 | Prompts for your **Gemini API key** — with a note about free vs paid tier (Pro Image model needs billing enabled) |
+| 5 | Asks **local vs cloud mode**; if cloud, prompts for Supabase URL + anon key |
+| 6 | Runs `npm install` if `node_modules` is missing or stale |
+| 7 | Runs `prisma migrate deploy` to create `dev.db` (local mode only) |
+| 8 | Creates `storage/creatives/` folder for asset uploads (local mode only) |
+| 9 | Starts the dev server (`npm run dev` or `npm run dev:prod`) |
+
+The script validates input format (Gemini key starts with `AIza`, Supabase URL matches `*.supabase.co`, anon key is a JWT) so typos are caught before they break the app.
+
+</details>
+
+---
+
+### Manual setup (if you prefer)
 
 ```bash
 # 1. Install dependencies
@@ -139,7 +178,10 @@ cp .env.example .env.local
 # 3. Add your GEMINI_API_KEY in .env.local
 #    (Supabase keys are optional — only needed for cloud mode)
 
-# 4. Run the app (local mode — SQLite + filesystem)
+# 4. Run database migrations (local mode)
+DATABASE_URL="file:./dev.db" npx prisma migrate deploy
+
+# 5. Run the app
 npm run dev
 ```
 
