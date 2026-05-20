@@ -132,13 +132,16 @@ npm install
 # 2. Copy environment template
 cp .env.example .env.local
 
-# 3. Fill in your credentials in .env.local
+# 3. Add your GEMINI_API_KEY in .env.local
+#    (Supabase keys are optional — only needed for cloud mode)
 
-# 4. Run the app
+# 4. Run the app (local mode — SQLite + filesystem)
 npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+> 🌐 **Want cloud mode (Supabase DB + Storage)?** Fill in `SUPABASE_URL` and `SUPABASE_ANON_KEY`, set `APP_ENV=production` in `.env.local`, then run `npm run dev:prod`. See [Supabase Setup](#️-supabase-setup) below.
 
 ---
 
@@ -163,33 +166,31 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-## 🔐 Authentication Bypass (Development)
+## 🔐 Authentication
 
-For local development, authentication is **bypassed by default**.
+The app supports **Google Sign-In via Supabase**, with a one-flag bypass for local development.
 
-### To Enable/Disable Bypass:
-
-Open `App.tsx` and find this line near the top:
+### Quick toggle (in `App.tsx`)
 
 ```typescript
-// --- DEVELOPMENT CONFIGURATION ---
-// Set this to true to bypass Google Sign-In during development.
-// Set to false for production to enforce authentication.
-const BYPASS_AUTH = true;
+const BYPASS_AUTH = true;                  // dev: skip login, mock session
+const ALLOWED_DOMAIN = 'yourdomain.com';   // prod: only this email domain can sign in
 ```
 
 | Value | Behavior |
 |-------|----------|
-| `true` | ✅ Bypass auth - App loads immediately (Development) |
-| `false` | 🔐 Require Google Sign-In with allowed domain (Production) |
+| `BYPASS_AUTH = true` | ✅ Auth skipped — app loads immediately (good for local dev) |
+| `BYPASS_AUTH = false` | 🔐 Requires Google Sign-In; only `@ALLOWED_DOMAIN` emails are accepted |
 
-### Domain Restriction (Production)
+> ⚠️ **Before flipping to `false`**, change `ALLOWED_DOMAIN` away from the default `'yourdomain.com'` — otherwise no one will be able to sign in.
 
-When `BYPASS_AUTH = false`, only users with emails from your allowed domain can sign in. To change this, modify the `ALLOWED_DOMAIN` constant in `App.tsx`:
+### Setting up Google Sign-In (production)
 
-```typescript
-const ALLOWED_DOMAIN = 'yourdomain.com';  // Change to your domain
-```
+To make `BYPASS_AUTH = false` actually work, you need to wire up Google OAuth in **both** Supabase and Google Cloud. Follow the step-by-step guide:
+
+### 👉 **[GOOGLE_AUTH_SETUP.md](./GOOGLE_AUTH_SETUP.md)** — 10-minute walkthrough with screenshots
+
+It covers: grabbing the Supabase callback URL, creating the Google Cloud OAuth app, where to paste the **Authorized redirect URI**, restricting access to your Workspace org, and troubleshooting.
 
 ---
 
@@ -390,9 +391,8 @@ npm run preview
 
 ### Google Sign-In Issues (Production)
 
-- Ensure `BYPASS_AUTH = false` in `App.tsx`
-- Configure Google OAuth in Supabase Dashboard > Authentication > Providers > Google
-- Set correct redirect URLs
+- Ensure `BYPASS_AUTH = false` and `ALLOWED_DOMAIN` is set correctly in `App.tsx`
+- Follow the full step-by-step in **[GOOGLE_AUTH_SETUP.md](./GOOGLE_AUTH_SETUP.md)** — it covers Supabase + Google Cloud config and the most common `redirect_uri_mismatch` fix
 
 ### TypeScript Errors in IDE
 
