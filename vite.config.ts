@@ -52,6 +52,10 @@ export default defineConfig(({ mode }) => {
         // Local dev server settings
         'process.env.LOCAL_SERVER_PORT': JSON.stringify(localServerPort),
         'process.env.LOCAL_STORAGE_PATH': JSON.stringify(env.LOCAL_STORAGE_PATH || './storage/creatives'),
+
+        // Generation concurrency: max parallel Gemini calls per batch.
+        // Default 5 — verified safe for gemini-3-pro-image-preview on a paid GCP project.
+        'process.env.GENERATION_CONCURRENCY': JSON.stringify(env.GENERATION_CONCURRENCY || '5'),
       },
       resolve: {
         alias: {

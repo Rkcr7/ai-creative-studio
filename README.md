@@ -118,12 +118,16 @@ generate a full set of ad creatives ready to ship to social, web, or print.
 
 - **Node.js** (v18 or higher recommended)
 - **npm** or **yarn**
-- **Gemini API Key** — [Get one here](https://aistudio.google.com/app/apikey)
+- **Gemini API Key with billing enabled** — [Get one here](https://aistudio.google.com/app/apikey)
 - **Supabase Account** *(optional — only for cloud mode)* — [Sign up free](https://supabase.com)
+
+> ⚠️ **About the Gemini API key:** This app generates images using `gemini-3-pro-image-preview` (Nano Banana Pro), which is a **Pro tier** model. A **free-tier** key from AI Studio will *not* work for image generation — free tier only covers Flash models. You'll need a key on a **billing-enabled GCP project**. [Enable billing →](https://ai.google.dev/gemini-api/docs/billing)
 
 ---
 
 ## ⚡ Quick Start
+
+> 👉 **New here? Start with local mode.** It only needs a Gemini API key — no Supabase, no Google OAuth, no SQL. Cloud mode is a 5-minute upgrade once you've tried it out.
 
 ```bash
 # 1. Install dependencies
