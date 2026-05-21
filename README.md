@@ -496,6 +496,9 @@ These are dev-time warnings and won't affect runtime.
 Released under the **[MIT License](./LICENSE)** — free to use, modify, and
 distribute. Just keep the copyright notice.
 
+**Owner:** Arcady Media Inc.  
+**Developer:** Ritik
+
 ---
 
 ## 🔗 Links
